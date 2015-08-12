@@ -108,7 +108,7 @@ Example:
      */
     search: function() {
       if(this.query != "") {
-        this.$$('#ajax').params = {"part":"snippet", "q":this.query, "key":this.googleApiKey, "maxResults":50};
+        this.$$('#ajax').params = {"part":"snippet", "q":this.query, "key":this.googleApiKey, "maxResults":50, "type":"video"};
         this.$$('#ajax').generateRequest();
       }
     },
