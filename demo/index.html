@@ -17,20 +17,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <link rel="import" href="../youtube-search.html">
   </head>
   <body>
+  <template id="t" is="dom-bind">
 
-    <p>An example of <code>&lt;youtube-search&gt;</code>:</p>
+    <input value="{{searchQuery::input}}">
 
-    <button>Say Something</button>
+    <button>Search</button>
 
-    <youtube-search author='{"name": "Lord Meowser", "image": "http://placekitten.com/g/200/300"}' fancy>
-      <h2>Hello youtube-search</h2>
+    <youtube-search query="{{searchQuery}}" google-api-key="AIzaSyDE73QRRHw7SO2H11MwuW35i17fPLzp7XE" videos="{{videos}}">
     </youtube-search>
-
+    
+    <template is="dom-repeat" items="{{videos}}">
+        <div># <span>{{index}}</span></div>
+        <div>video: <span>{{item.snippet.title}}</span></div>
+    </template>
+    
     <script>
       document.querySelector('button').addEventListener('click', function() {
-        alert(document.querySelector('youtube-search').sayHello('Hallo!'));
+        document.querySelector('youtube-search').search();
       });
     </script>
-
+  </template>
+  <script>
+    var t = document.querySelector('#t');
+  
+    // The dom-change event signifies when the template has stamped its DOM.
+    t.addEventListener('dom-change', function() {
+    // auto-binding template is ready.
+    });
+  </script>
   </body>
 </html>
