@@ -1,10 +1,10 @@
 {
   "name": "youtube-search",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "authors": [
-    "Anonymous <anonymous@example.com>"
+    "Pascal de Ladurantaye <pascal.de.ladurantaye@gmail.com>"
   ],
-  "description": "An element providing a solution to no problem in particular.",
+  "description": "An element used to simplify youtube video search.",
   "keywords": [
     "web-component",
     "web-components",
@@ -13,7 +13,7 @@
   ],
   "main": "youtube-search.html",
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "homepage": "https://github.com/pascal-de-ladurantaye/youtube-search/",
   "ignore": [
     "/.*",
     "/test/",
