@@ -115,7 +115,9 @@ Example:
     
     _handleResponse: function(e) {
       console.log(e.detail.response.items)
-      this._setVideos(e.detail.response.items);
+      this._setVideos(e.detail.response.items.map(function(element){
+        return element.id.videoId
+      }));
     },
 
   });
