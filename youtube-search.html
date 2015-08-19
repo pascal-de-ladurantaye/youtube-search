@@ -16,20 +16,31 @@ Example:
     
     <template is="dom-repeat" items="{{videos}}">
         <div># <span>{{index}}</span></div>
-        <div>videoId: <span>{{item}}</span></div>
+        <div>videoId: <span>{{item.id}}</span></div>
+        <div>videoTitle: <span>{{item.snippet.localized.title}}</span></div>
+        <div>videoDescription: <span>{{item.snippet.localized.description}}</span></div>
+        <div>videoDuration: <span>{{duration(item.contentDetails.duration)}}</span></div>
+        <div>videoNumberOfViews: <span>{{item.statistics.viewCount}}</span></div>
+        </br>
     </template>
     
     <script>
       document.querySelector('button').addEventListener('click', function() {
         document.querySelector('youtube-search').search();
       });
+      var template = document.querySelector('#t');
+      template.duration = function(duration) {
+        return moment.duration(duration).format()
+      };
     </script>
 
 @demo
 -->
 <dom-module id="youtube-search">
   <template>
-    <iron-ajax id="ajax" url="https://www.googleapis.com/youtube/v3/search" handle-as="json" on-response="_handleResponse" verbose>
+    <iron-ajax id="search" url="https://www.googleapis.com/youtube/v3/search" handle-as="json" on-response="_handleSearchResponse" verbose>
+    </iron-ajax>
+    <iron-ajax id="videos" url="https://www.googleapis.com/youtube/v3/videos" handle-as="json" on-response="_handleVideosResponse" verbose>
     </iron-ajax>
   </template>
   
@@ -108,16 +119,25 @@ Example:
      */
     search: function() {
       if(this.query != "") {
-        this.$$('#ajax').params = {"part":"snippet", "q":this.query, "key":this.googleApiKey, "maxResults":50, "type":"video"};
-        this.$$('#ajax').generateRequest();
+        this.$$('#search').params = {"part":"id", "q":this.query, "key":this.googleApiKey, "maxResults":50, "type":"video"};
+        this.$$('#search').generateRequest();
       }
     },
+    getVideos: function(videoIds) {
+      commaSeparatedIds = videoIds.join(',')
+      this.$$('#videos').params = {"part":"snippet,contentDetails,statistics", "key":this.googleApiKey, "id":commaSeparatedIds};
+      this.$$('#videos').generateRequest();
+    },
     
-    _handleResponse: function(e) {
-      console.log(e.detail.response.items)
-      this._setVideos(e.detail.response.items.map(function(element){
+    _handleSearchResponse: function(e) {
+      this.getVideos(e.detail.response.items.map(function(element){
         return element.id.videoId
       }));
+    },
+    
+    _handleVideosResponse: function(e) {
+      console.log(e.detail.response.items)
+      this._setVideos(e.detail.response.items);
     },
 
   });

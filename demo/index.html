@@ -14,10 +14,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>youtube-search Demo</title>
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../moment/moment.js"></script>
+    <script src="../../moment-duration-format/lib/moment-duration-format.js"></script>
     <link rel="import" href="../youtube-search.html">
   </head>
   <body>
   <template id="t" is="dom-bind">
+    <p>This demo uses moment.js and moment-duration-format.js</p>
 
     <input value="{{searchQuery::input}}">
 
@@ -28,13 +31,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     
     <template is="dom-repeat" items="{{videos}}">
         <div># <span>{{index}}</span></div>
-        <div>videoId: <span>{{item}}</span></div>
+        <div>videoId: <span>{{item.id}}</span></div>
+        <div>videoTitle: <span>{{item.snippet.localized.title}}</span></div>
+        <div>videoDescription: <span>{{item.snippet.localized.description}}</span></div>
+        <div>videoDuration: <span>{{duration(item.contentDetails.duration)}}</span></div>
+        <div>videoNumberOfViews: <span>{{item.statistics.viewCount}}</span></div>
+        </br>
     </template>
     
     <script>
       document.querySelector('button').addEventListener('click', function() {
         document.querySelector('youtube-search').search();
       });
+      var template = document.querySelector('#t');
+      template.duration = function(duration) {
+        return moment.duration(duration).format()
+      };
     </script>
   </template>
   <script>
